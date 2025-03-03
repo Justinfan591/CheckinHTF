@@ -18,7 +18,7 @@ header h1 {
     margin: 0;
     font-family: 'Arial', sans-serif;
     font-weight: bold;
-    background: linear-gradient(90deg, #4285f4, #EA4335);
+    background: linear-gradient(90deg, #4285f4, #fb579b);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -51,7 +51,7 @@ header h1 {
 }
 
 h2 {
-    font-size: 2rem;
+    font-size: 1.7rem;
     background: linear-gradient(90deg, #6699FF, #9966CC, #FF6699);
     background-clip: text;
     -webkit-background-clip: text;
