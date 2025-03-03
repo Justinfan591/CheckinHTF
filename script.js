@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue, get } from "firebase/database";
+import { formatInTimeZone } from 'date-fns-tz';
 
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -57,18 +58,7 @@ function checkDeviceStatus() {
 
 function getTorontoTime() {
     const now = new Date();
-    const torontoTime = now.toLocaleString("en-CA", {
-        timeZone: "America/Toronto",
-        hour12: false,
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit"
-    });
-    console.log("Toronto time:", torontoTime);
-    return torontoTime;
+    return formatInTimeZone(now, 'America/Toronto', 'yyyy-MM-dd HH:mm:ss');
 }
 
 window.onload = checkDeviceStatus;
