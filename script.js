@@ -33,8 +33,8 @@ window.checkEmail = async function () {
     try {
         const sanitizedEmail = sanitizeEmail(emailInput.toLowerCase());
 
-        // check if email registered for workshop1
-        const registeredEmailsRef = ref(database, "registeredEmails/workshop1");
+        // check if email registered for workshop2
+        const registeredEmailsRef = ref(database, "registeredEmails/workshop2");
         onValue(registeredEmailsRef, (snapshot) => {
             const registeredEmails = snapshot.val() || [];
 
@@ -45,7 +45,7 @@ window.checkEmail = async function () {
             }
 
             // check if email already checked in
-            const checkedInEmailsRef = ref(database, "checkedInEmails/workshop1");
+            const checkedInEmailsRef = ref(database, "checkedInEmails/workshop2");
             onValue(checkedInEmailsRef, (snapshot) => {
                 const checkedInEmails = snapshot.val() || [];
 
@@ -53,9 +53,9 @@ window.checkEmail = async function () {
                     result.textContent = "⚠️ You have already checked in.";
                     result.style.color = "orange";
                 } else {
-                    // add email to workshop1 checked-in
+                    // add email to workshop2 checked-in
                     const updatedCheckedInEmails = [...checkedInEmails, sanitizedEmail];
-                    set(ref(database, "checkedInEmails/workshop1"), updatedCheckedInEmails);
+                    set(ref(database, "checkedInEmails/workshop2"), updatedCheckedInEmails);
                     result.textContent = "✅ Check-in successful!";
                     result.style.color = "green";
                     confetti({
