@@ -45,7 +45,7 @@ function hideCheckinForm(message, color) {
 
 function checkDeviceStatus() {
     const deviceId = getDeviceId();
-    const checkedInDevicesRef = ref(database, "checkedInDevices/workshop2");
+    const checkedInDevicesRef = ref(database, "checkedInDevices/semifinals");
     
     onValue(checkedInDevicesRef, (snapshot) => {
         const checkedInDevices = snapshot.val() || [];
@@ -74,15 +74,15 @@ window.checkEmail = async function () {
     }
 
     try {
-        const checkedInEmailsRef = ref(database, "checkedInEmails/workshop2");
+        const checkedInEmailsRef = ref(database, "checkedInEmails/semifinals");
         const checkedInEmailsSnapshot = await get(checkedInEmailsRef);
         const checkedInEmails = checkedInEmailsSnapshot.val() || [];
 
-        const checkedInDevicesRef = ref(database, "checkedInDevices/workshop2");
+        const checkedInDevicesRef = ref(database, "checkedInDevices/semifinals");
         const checkedInDevicesSnapshot = await get(checkedInDevicesRef);
         const checkedInDevices = checkedInDevicesSnapshot.val() || [];
 
-        const registeredEmailsRef = ref(database, "registeredEmails/workshop2");
+        const registeredEmailsRef = ref(database, "registeredEmails/semifinals");
         const registeredEmailsSnapshot = await get(registeredEmailsRef);
         const registeredEmails = registeredEmailsSnapshot.val() || [];
 
@@ -102,15 +102,15 @@ window.checkEmail = async function () {
             return;
         }
 
-        // add device ID to workshop2 checked-in devices
+        // add device ID to semifinals checked-in devices
         const deviceId = getDeviceId();
         const updatedCheckedInDevices = [...checkedInDevices, deviceId];
-        await set(ref(database, "checkedInDevices/workshop2"), updatedCheckedInDevices);
+        await set(ref(database, "checkedInDevices/semifinals"), updatedCheckedInDevices);
 
-        // add email + timestamp to workshop2 checked-in emails
+        // add email + timestamp to semifinals checked-in emails
         const timestamp = getTorontoTime();
         const updatedCheckedInEmails = [...checkedInEmails, { email: sanitizedEmail, timestamp }];
-        await set(ref(database, "checkedInEmails/workshop2"), updatedCheckedInEmails);
+        await set(ref(database, "checkedInEmails/semifinals"), updatedCheckedInEmails);
 
         hideCheckinForm("✅ Check-in successful!", "green");
         confetti({

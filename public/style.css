@@ -50,7 +50,7 @@ header h1 {
     margin-top: 5%;
 }
 
-h2 {
+h2 span {
     font-size: 1.7rem;
     background: linear-gradient(90deg, #6699FF, #9966CC, #FF6699);
     background-clip: text;
