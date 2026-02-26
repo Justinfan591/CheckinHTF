@@ -18,7 +18,7 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 function sanitizeEmail(email) {
-    return email.replace(/[.#$\[\]]/g, "_");
+    return email.replace(/[.#$\[\]]/g, "_").toLowerCase();
 }
 
 function getDeviceId() {
@@ -45,7 +45,7 @@ function hideCheckinForm(message, color) {
 
 function checkDeviceStatus() {
     const deviceId = getDeviceId();
-    const checkedInDevicesRef = ref(database, "checkedInDevices/semifinals");
+    const checkedInDevicesRef = ref(database, "checkedInDevices/HTF26Workshop");
     
     onValue(checkedInDevicesRef, (snapshot) => {
         const checkedInDevices = snapshot.val() || [];
@@ -74,43 +74,48 @@ window.checkEmail = async function () {
     }
 
     try {
-        const checkedInEmailsRef = ref(database, "checkedInEmails/semifinals");
+        const checkedInEmailsRef = ref(database, "checkedInEmails/HTF26Workshop");
         const checkedInEmailsSnapshot = await get(checkedInEmailsRef);
-        const checkedInEmails = checkedInEmailsSnapshot.val() || [];
+        const checkedInEmailsData = checkedInEmailsSnapshot.val() || {};
 
-        const checkedInDevicesRef = ref(database, "checkedInDevices/semifinals");
+        const checkedInDevicesRef = ref(database, "checkedInDevices/HTF26Workshop");
         const checkedInDevicesSnapshot = await get(checkedInDevicesRef);
         const checkedInDevices = checkedInDevicesSnapshot.val() || [];
 
-        const registeredEmailsRef = ref(database, "registeredEmails/semifinals");
+        const registeredEmailsRef = ref(database, "registeredEmails/HTF26Workshop");
         const registeredEmailsSnapshot = await get(registeredEmailsRef);
         const registeredEmails = registeredEmailsSnapshot.val() || [];
 
-        const sanitizedEmail = sanitizeEmail(emailInput.toLowerCase());
+        const sanitizedEmail = sanitizeEmail(emailInput);
 
-        
         if (!registeredEmails.includes(sanitizedEmail)) {
-            result.textContent = "❌ Invalid / Not Registered";
+            console.log(`Invalid email entered: ${sanitizedEmail}`);
+            result.textContent = "❌ Invalid / Email Not Registered";
             result.style.color = "red";
             return;
         }
 
-        const isEmailCheckedIn = checkedInEmails.some(entry => entry.email === sanitizedEmail);
-        if (isEmailCheckedIn) {
+	 const emailAlreadyCheckedIn = Object.values(checkedInEmailsData).some(
+  	     entry => entry.email === sanitizedEmail
+	 );
+        if (emailAlreadyCheckedIn) {
             result.textContent = "⚠️ Email already checked in";
             result.style.color = "orange";
             return;
         }
 
-        // add device ID to semifinals checked-in devices
+        // add device ID to checked-in devices
         const deviceId = getDeviceId();
         const updatedCheckedInDevices = [...checkedInDevices, deviceId];
-        await set(ref(database, "checkedInDevices/semifinals"), updatedCheckedInDevices);
+        await set(ref(database, "checkedInDevices/HTF26Workshop"), updatedCheckedInDevices);
 
-        // add email + timestamp to semifinals checked-in emails
-        const timestamp = getTorontoTime();
-        const updatedCheckedInEmails = [...checkedInEmails, { email: sanitizedEmail, timestamp }];
-        await set(ref(database, "checkedInEmails/semifinals"), updatedCheckedInEmails);
+        // add email + timestamp to checked-in emails
+        const keys = Object.keys(checkedInEmailsData).map(Number).filter(k => !isNaN(k));
+	 const nextKey = keys.length > 0 ? Math.max(...keys) + 1 : 1;
+	 await set(ref(database, `checkedInEmails/HTF26Workshop/${nextKey}`), {
+  	 email: sanitizedEmail,
+  	     timestamp: getTorontoTime()
+	 });
 
         hideCheckinForm("✅ Check-in successful!", "green");
         confetti({

@@ -58,6 +58,19 @@ h2 span {
     -webkit-text-fill-color: transparent;
 }
 
+.footer {
+    position: fixed;
+    bottom: 10px;
+    font-size: 0.75rem;
+    background: linear-gradient(90deg, #6699FF, #9966CC, #FF6699);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+    margin-bottom: 3%
+}
+
 input {
     padding: 10px;
     width: 80%;
